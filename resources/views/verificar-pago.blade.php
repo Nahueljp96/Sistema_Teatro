@@ -7,12 +7,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            /* Agregar la imagen de fondo */
+            background-image: url('/storage/teatro.jpg'); /* Cambia esto por la ruta de tu imagen */
+            background-size: cover; /* Escala la imagen para cubrir toda la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-attachment: fixed; /* La imagen no se desplaza al hacer scroll */
+            color: #333;
         }
         .container {
             margin-top: 50px;
             max-width: 600px;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -38,7 +43,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Verificar Pago</h2>
+        <h2 class="text-center mb-4">Asistencia</h2>
         <form action="{{ route('verificar-pago.submit') }}" method="POST" class="needs-validation" novalidate>
             @csrf
             <div class="mb-3">
@@ -87,3 +92,4 @@
     </script>
 </body>
 </html>
+

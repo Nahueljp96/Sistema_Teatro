@@ -21,12 +21,27 @@ Route::get('/', function () {
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\CompraController;
+use App\Models\Obra;
 
 #web:
 Route::get('/verificar-pago', [PagoController::class, 'showVerificarPago'])->name('verificar-pago');
 Route::post('/verificar-pago', [PagoController::class, 'verificarPago'])->name('verificar-pago.submit');
+Route::view('/', 'inicio')->name('inicio');
+Route::view('/nosotros', 'nosotros')->name('nosotros');
+Route::view('/cursos', 'cursos')->name('cursos');
+
+
 
 Route::get('/', [WebController::class, 'inicio']);
 Route::get('/obras', [WebController::class, 'obras']);
 Route::post('/comprar-entrada', [WebController::class, 'comprarEntrada']);
 Route::post('/procesar-compra', [CompraController::class, 'procesarCompra'])->name('procesar-compra');
+Route::get('/comprar-entradas/{obra_id}', [CompraController::class, 'show'])->name('comprar-entradas');
+Route::get('/obras', function () {
+    $obras = Obra::all(); // Obtiene todas las obras desde la base de datos
+    return view('obras', compact('obras'));
+})->name('obras');
+
+
+
+

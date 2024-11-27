@@ -16,4 +16,6 @@ class Obra extends Model
         'imagen',
         'asientos_disponibles',
     ];
+
+    
 }

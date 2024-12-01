@@ -15,6 +15,7 @@ class Obra extends Model
         'descripcion',
         'imagen',
         'asientos_disponibles',
+        'precio',
     ];
 
     

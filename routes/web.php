@@ -21,7 +21,9 @@ Route::get('/', function () {
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\MercadoPagoController;
 use App\Models\Obra;
+
 
 #web:
 Route::get('/verificar-pago', [PagoController::class, 'showVerificarPago'])->name('verificar-pago');
@@ -41,6 +43,11 @@ Route::get('/obras', function () {
     $obras = Obra::all(); // Obtiene todas las obras desde la base de datos
     return view('obras', compact('obras'));
 })->name('obras');
+
+
+Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
+Route::get('/mercadopago/success', [MercadoPagoController::class, 'handlePaymentSuccess'])->name('mercadopago.success');
+Route::get('/mercadopago/failed', [MercadoPagoController::class, 'handlePaymentFailed'])->name('mercadopago.failed');
 
 
 

@@ -41,6 +41,11 @@ class ObraResource extends Resource
                     ->rule('numeric') // Validación numérica
                     ->minValue(1)
                     ->required(),
+                TextInput::make('precio')
+                    ->label('Precio Entrada')
+                    ->rule('numeric') // Validación numérica
+                    ->minValue(1)
+                    ->required(),
             ]);
     }
 

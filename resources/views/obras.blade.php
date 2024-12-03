@@ -2,7 +2,7 @@
 
 @section('title', 'Obras de Teatro')
 
-@section('hero-bg', 'path/to/your/custom-image.jpg')  {{-- Puedes personalizar la imagen de fondo aquí --}}
+@section('hero-bg', 'path/to/your/custom-image.jpg')
 @section('hero-title', 'Explora las Mejores Obras de Teatro')
 
 @push('styles')
@@ -68,6 +68,8 @@
                                     <label for="address" class="form-label">Dirección</label>
                                     <input type="text" id="address" class="form-control" required>
                                 </div>
+                                <!-- Contenedor para el wallet de Mercado Pago -->
+                                <div id="wallet_container"></div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -86,6 +88,7 @@
     <script>
         const mp = new MercadoPago("{{ env('MERCADO_PAGO_PUBLIC_KEY') }}");
 
+        // Inicializar el wallet de Mercado Pago cuando se abra el modal
         document.querySelectorAll('#checkout-btn').forEach(button => {
             button.addEventListener('click', function () {
                 const form = this.closest('form');
@@ -118,32 +121,30 @@
                 };
 
                 fetch('/create-preference', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
-                        },
-                        body: JSON.stringify(orderData)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error en la respuesta del servidor');
-                        }
-                        return response.json();
-                    })
-                    .then(preference => {
-                        if (preference.error) {
-                            throw new Error(preference.error);
-                        }
-                        mp.checkout({
-                            preference: {
-                                id: preference.id
-                            },
-                            autoOpen: true
-                        });
-                    })
-                    .catch(error => console.error('Error al crear la preferencia:', error));
-            });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(preference => {
+                    if (preference.error) {
+                        throw new Error(preference.error);
+                    }
+
+                    // Aquí se hace la redirección a la página de Mercado Pago con la preferencia creada
+                    window.location.href = preference.init_point;  // Redirige al usuario a la URL generada por Mercado Pago
+                })
+                .catch(error => console.error('Error al crear la preferencia:', error));
+
+                            });
         });
     </script>
 @endpush

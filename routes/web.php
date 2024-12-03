@@ -48,6 +48,16 @@ Route::get('/obras', function () {
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'handlePaymentSuccess'])->name('mercadopago.success');
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'handlePaymentFailed'])->name('mercadopago.failed');
+Route::get('/prueba', function(){ $backUrls = [
+    'success' => route('mercadopago.success'),
+    'failure' => route('mercadopago.failed')
+    
+];dd($backUrls);});
+
+
+
+
+
 
 
 

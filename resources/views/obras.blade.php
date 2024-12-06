@@ -56,17 +56,18 @@
                             <div class="modal-body">
                                 <input type="hidden" id="product_id" value="{{ $obra->id }}">
                                 <input type="hidden" id="product_price" value="{{ $obra->precio }}">
-                                <div class="mb-3">
-                                    <label for="quantity" class="form-label">Cantidad de Entradas</label>
-                                    <input type="number" id="quantity" class="form-control" min="1" max="{{ $obra->asientos_disponibles }}" required>
-                                </div>
+                                <p><strong>Precio de la Entrada:</strong> ${{ $obra->precio }}</p>
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Teléfono</label>
                                     <input type="text" id="phone" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="address" class="form-label">Dirección</label>
-                                    <input type="text" id="address" class="form-control" required>
+                                    <label for="email" class="form-label">Correo Electrónico/Email</label>
+                                    <input type="email" id="email" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" id="name" class="form-control" required>
                                 </div>
                                 <!-- Contenedor para el wallet de Mercado Pago -->
                                 <div id="wallet_container"></div>
@@ -90,61 +91,93 @@
 
         // Inicializar el wallet de Mercado Pago cuando se abra el modal
         document.querySelectorAll('#checkout-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const form = this.closest('form');
-                const obraId = form.querySelector('#product_id').value;
-                const cantidad = parseInt(form.querySelector('#quantity').value, 10);
-                const telefono = form.querySelector('#phone').value;
-                const direccion = form.querySelector('#address').value;
+         button.addEventListener('click', function () {
+            const form = this.closest('form'); //datos que enviamos al back!!
+            const obraId = form.querySelector('#product_id').value;
+            const telefono = form.querySelector('#phone').value;
+            const nombre = form.querySelector('#name').value;
+            const email = form.querySelector('#email').value;
 
-                if (!cantidad || !telefono || !direccion) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Por favor, completa todos los campos del formulario.',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                    return;
+            // Validación de los campos
+            if (!telefono || !email || !nombre) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Por favor, completa todos los campos del formulario.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            const orderData = {
+                product: [{
+                    id: obraId,
+                    title: '{{ $obra->titulo }}',
+                    description: 'Entrada para la obra {{ $obra->titulo }}',
+                    currency_id: "ARS",
+                    quantity: 1, // Siempre 1 entrada
+                    unit_price: parseFloat('{{ $obra->precio }}'),
+                }],
+                name: nombre,
+                phone: telefono,
+                email: email,
+                obra_id: obraId,
+                telefono: telefono,
+                comprador_email: email,
+                nombre_comprador: nombre
+
+            };
+            //pruebaaaaaa (no anda )
+            // fetch('/guardar-entrada', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+            //     },
+            //     body: JSON.stringify({
+            //         obra_id: obraId,
+            //         telefono: telefono,
+            //         comprador_email: email,
+            //         nombre_comprador: nombre
+            //     })
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log('Respuesta:', data);
+            // })
+            // .catch(error => console.error('Error al guardar la entrada:', error));
+
+            //fin prueba
+            // Enviar los datos al backend para crear la preferencia
+            fetch('/create-preference', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify(orderData)
+            })
+            
+            
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                console.log("respuesta", response);
+                
+                return response.json();
+            })
+            
+            .then(preference => {
+                if (preference.error) {
+                    throw new Error(preference.error);
                 }
 
-                const orderData = {
-                    product: [{
-                        id: obraId,
-                        title: '{{ $obra->titulo }}',
-                        description: 'Entrada para la obra {{ $obra->titulo }}',
-                        currency_id: "ARS",
-                        quantity: cantidad,
-                        unit_price: parseFloat('{{ $obra->precio }}'),
-                    }],
-                    phone: telefono,
-                    address: direccion,
-                };
-
-                fetch('/create-preference', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
-                    },
-                    body: JSON.stringify(orderData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                    return response.json();
-                })
-                .then(preference => {
-                    if (preference.error) {
-                        throw new Error(preference.error);
-                    }
-
-                    // Aquí se hace la redirección a la página de Mercado Pago con la preferencia creada
-                    window.location.href = preference.init_point;  // Redirige al usuario a la URL generada por Mercado Pago
-                })
-                .catch(error => console.error('Error al crear la preferencia:', error));
-
-                            });
+                // Redirige al usuario a la URL generada por Mercado Pago
+                window.location.href = preference.init_point;
+            })
+            .catch(error => console.error('Error al crear la preferencia:', error));
         });
+    });
     </script>
 @endpush

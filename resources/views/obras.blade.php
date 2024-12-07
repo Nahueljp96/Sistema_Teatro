@@ -115,7 +115,7 @@
                     title: '{{ $obra->titulo }}',
                     description: 'Entrada para la obra {{ $obra->titulo }}',
                     currency_id: "ARS",
-                    quantity: 1, // Siempre 1 entrada
+                    quantity: 1, // Siempre 1 entrada, luego hay que modificar hice para testear!!!
                     unit_price: parseFloat('{{ $obra->precio }}'),
                 }],
                 name: nombre,
@@ -127,27 +127,7 @@
                 nombre_comprador: nombre
 
             };
-            //pruebaaaaaa (no anda )
-            // fetch('/guardar-entrada', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
-            //     },
-            //     body: JSON.stringify({
-            //         obra_id: obraId,
-            //         telefono: telefono,
-            //         comprador_email: email,
-            //         nombre_comprador: nombre
-            //     })
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Respuesta:', data);
-            // })
-            // .catch(error => console.error('Error al guardar la entrada:', error));
-
-            //fin prueba
+            
             // Enviar los datos al backend para crear la preferencia
             fetch('/create-preference', {
                 method: 'POST',

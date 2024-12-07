@@ -14,8 +14,16 @@ class Entrada extends Model
         'comprador_email',
         'cantidad',
         'nombre_comprador',
-        'estado_pago'
+        'estado_pago',
+        'telefono',
+        'preference_id',
+        'estado_pago',
 
 
     ];
+
+    public function obra()
+{
+    return $this->belongsTo(Obra::class);
+}
 }

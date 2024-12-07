@@ -6,19 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    /**
+     * Run the migrations.
+     */
+        public function up()
     {
         Schema::table('entradas', function (Blueprint $table) {
-            $table->integer('cantidad')->default(1)->change();
+            $table->string('estado_pago')->change(); // Cambiar de ENUM a VARCHAR
         });
-        
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::table('entradas', function (Blueprint $table) {
-            // Revertimos el cambio quitando el valor por defecto
-            $table->integer('cantidad')->change();
+            $table->enum('estado_pago', ['pendiente', 'pagado', 'fallido'])->change(); // Revertir el cambio
         });
     }
+
 };

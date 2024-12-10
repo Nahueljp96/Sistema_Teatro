@@ -10,8 +10,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\FileUpload;
 
 class CursoResource extends Resource
 {
@@ -28,6 +31,15 @@ class CursoResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Textarea::make('descripcion')
                     ->columnSpanFull(),
+                FileUpload::make('imagen')
+                ->label('Imagen')
+                ->image()
+                ->required(),
+                TextInput::make('precio')
+                    ->label('Precio')
+                    ->rule('numeric') // Validación numérica
+                    ->minValue(1)
+                    ->required(),    
             ]);
     }
 

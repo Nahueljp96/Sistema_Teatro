@@ -11,15 +11,63 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
 
         .card-body {
             flex-grow: 1;
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #555;
         }
 
         .card:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px); /* Efecto de elevación */
+        }
+
+        .btn-comprar {
+            background-color: #007bff; /* Color de fondo moderno */
+            color: white; /* Texto blanco */
+            border: none; /* Sin borde */
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 25px; /* Bordes redondeados */
+            text-transform: uppercase; /* Texto en mayúsculas */
+            font-weight: 600;
+            transition: all 0.3s ease; /* Efecto de transición */
+        }
+
+        .btn-comprar:hover {
+            background-color: #0056b3; /* Color de fondo al pasar el ratón */
+            transform: scale(1.05); /* Efecto de ampliación */
+        }
+
+        .btn-comprar:focus {
+            outline: none; /* Quitar el borde de enfoque */
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .modal-footer .btn-secondary {
+            background-color: #f1f1f1;
+        }
+        
+        .modal-footer .btn-primary {
+            background-color: #28a745;
         }
     </style>
 @endpush
@@ -36,8 +84,8 @@
                         <p class="card-text">{{ Str::limit($obra->descripcion, 100) }}</p>
                         <p class="card-text">{{ Str::limit($obra->precio, 100) }}</p>
                         <p><strong>Asientos disponibles:</strong> {{ $obra->asientos_disponibles }}</p>
-                        <button class="btn btn-comprar w-100" data-bs-toggle="modal" data-bs-target="#modalComprar-{{ $obra->id }}">
-                            Comprar Entrada
+                        <button class="btn btn-comprar w-100 py-3 mt-3" data-bs-toggle="modal" data-bs-target="#modalComprar-{{ $obra->id }}">
+                            <i class="fas fa-cart-plus"></i> Comprar Entrada
                         </button>
                     </div>
                 </div>
@@ -91,73 +139,61 @@
 
         // Inicializar el wallet de Mercado Pago cuando se abra el modal
         document.querySelectorAll('#checkout-btn').forEach(button => {
-         button.addEventListener('click', function () {
-            const form = this.closest('form'); //datos que enviamos al back!!
-            const obraId = form.querySelector('#product_id').value;
-            const telefono = form.querySelector('#phone').value;
-            const nombre = form.querySelector('#name').value;
-            const email = form.querySelector('#email').value;
+            button.addEventListener('click', function () {
+                const form = this.closest('form'); // Datos que enviamos al backend
+                const obraId = form.querySelector('#product_id').value;
+                const telefono = form.querySelector('#phone').value;
+                const nombre = form.querySelector('#name').value;
+                const email = form.querySelector('#email').value;
 
-            // Validación de los campos
-            if (!telefono || !email || !nombre) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Por favor, completa todos los campos del formulario.',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-                return;
-            }
-
-            const orderData = {
-                product: [{
-                    id: obraId,
-                    title: '{{ $obra->titulo }}',
-                    description: 'Entrada para la obra {{ $obra->titulo }}',
-                    currency_id: "ARS",
-                    quantity: 1, // Siempre 1 entrada, luego hay que modificar hice para testear!!!
-                    unit_price: parseFloat('{{ $obra->precio }}'),
-                }],
-                name: nombre,
-                phone: telefono,
-                email: email,
-                obra_id: obraId,
-                telefono: telefono,
-                comprador_email: email,
-                nombre_comprador: nombre
-
-            };
-            
-            // Enviar los datos al backend para crear la preferencia
-            fetch('/create-preference', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
-                },
-                body: JSON.stringify(orderData)
-            })
-            
-            
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
-                console.log("respuesta", response);
-                
-                return response.json();
-            })
-            
-            .then(preference => {
-                if (preference.error) {
-                    throw new Error(preference.error);
+                // Validación de los campos
+                if (!telefono || !email || !nombre) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Por favor, completa todos los campos del formulario.',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    return;
                 }
 
-                // Redirige al usuario a la URL generada por Mercado Pago
-                window.location.href = preference.init_point;
-            })
-            .catch(error => console.error('Error al crear la preferencia:', error));
+                const orderData = {
+                    product: [{
+                        id: obraId,
+                        title: '{{ $obra->titulo }}',
+                        description: 'Entrada para la obra {{ $obra->titulo }}',
+                        currency_id: "ARS",
+                        quantity: 1, // Siempre 1 entrada
+                        unit_price: parseFloat('{{ $obra->precio }}'),
+                    }],
+                    name: nombre,
+                    phone: telefono,
+                    email: email,
+                    obra_id: obraId,
+                    telefono: telefono,
+                    comprador_email: email,
+                    nombre_comprador: nombre
+                };
+
+                // Enviar los datos al backend para crear la preferencia
+                fetch('/create-preference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => response.json())
+                .then(preference => {
+                    if (preference.error) {
+                        throw new Error(preference.error);
+                    }
+                    // Redirige al usuario a la URL generada por Mercado Pago
+                    window.location.href = preference.init_point;
+                })
+                .catch(error => console.error('Error al crear la preferencia:', error));
+            });
         });
-    });
     </script>
 @endpush

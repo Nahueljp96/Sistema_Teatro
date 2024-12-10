@@ -20,6 +20,7 @@ Route::get('/', function () {
 
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\WebControllerCursos;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Models\Obra;
@@ -35,6 +36,7 @@ Route::view('/cursos', 'cursos')->name('cursos');
 
 
 Route::get('/', [WebController::class, 'inicio']);
+Route::get('/cursos', [WebControllerCursos::class, 'cursos']);
 Route::get('/obras', [WebController::class, 'obras']);
 Route::post('/comprar-entrada', [WebController::class, 'comprarEntrada']);
 Route::post('/procesar-compra', [CompraController::class, 'procesarCompra'])->name('procesar-compra');

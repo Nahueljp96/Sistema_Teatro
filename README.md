@@ -13,3 +13,13 @@
 #### NAHUEL::
 
 RECORDAR: SETIE LA BASE DE DATOS PARA QUE ALMACENE ENTRADAS POR DEFAULT 1 PARA TEST, LUEGO HAY QUE MODIFICAR PARA QUE PUEDAN COMPRAR MAS DE UNA ENTRADA.
+
+DEBUGGEAR QUE NO SE VEAN LAS IMAGENES EN PRODUCCIÓN: 
+
+Si el directorio storage no existe, créalo manualmente para asegurarte de que Laravel pueda escribir en él:
+mkdir -p /home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage
+(OBVIO USANDO EL SSH)
+Comando para crear enlace simbolico (ya que artisan no deja si es webcompartido) :
+ln -s /home/u594708880/domains/bisque-ram-716931.hostingersite.com/storage/app/public /home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage
+
+(recordar que para que la web pueda ver las imagenes, se deben almacenar en "public_html/public/"crear carpeta "storage" ) 

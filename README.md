@@ -23,3 +23,16 @@ Comando para crear enlace simbolico (ya que artisan no deja si es webcompartido)
 ln -s /home/u594708880/domains/bisque-ram-716931.hostingersite.com/storage/app/public /home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage
 
 (recordar que para que la web pueda ver las imagenes, se deben almacenar en "public_html/public/"crear carpeta "storage" ) 
+
+5. Verifica la configuración del almacenamiento
+Revisa también la configuración del disco en config/filesystems.php para asegurarte de que el disco public esté correctamente configurado, como mencionamos anteriormente:
+
+php
+Copy code
+'public' => [
+    'driver' => 'local',
+    'root' => '/home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage',
+    'url' => env('APP_URL') . '/storage',
+    'visibility' => 'public',
+],
+tambien hice eso, POR LAS DUDAS!!!

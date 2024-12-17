@@ -12,10 +12,10 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            border: 1px solid #ddd;
+            border: none; /* Sin borde para un aspecto más limpio */
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición para sombra */
         }
 
         .card-body {
@@ -24,8 +24,8 @@
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: 500;
+            font-size: 1.5rem; /* Aumentar el tamaño del título */
+            font-weight: 600; /* Hacer el título más destacado */
         }
 
         .card-text {
@@ -35,6 +35,7 @@
 
         .card:hover {
             transform: translateY(-5px); /* Efecto de elevación */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el ratón */
         }
 
         .btn-comprar {
@@ -54,10 +55,6 @@
             transform: scale(1.05); /* Efecto de ampliación */
         }
 
-        .btn-comprar:focus {
-            outline: none; /* Quitar el borde de enfoque */
-        }
-
         .modal-header {
             background-color: #007bff;
             color: white;
@@ -70,65 +67,71 @@
         .modal-footer .btn-primary {
             background-color: #28a745;
         }
+
+        /* Estilo para el contenedor de cursos */
+        .cursos-container {
+            margin-top: 30px;
+        }
     </style>
 @endpush
 
 @section('content')
     <h2 class="text-center mb-5">Cursos Disponibles</h2>
-    <div class="row g-4">
-        @foreach ($cursos as $curso)
-            <div class="col-lg-4 col-md-6">
-                <div class="card">
-                    <img src="{{ asset('storage/' . $curso->imagen) }}" class="card-img-top" alt="{{ $curso->nombre }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $curso->nombre }}</h5>
-                        <p class="card-text">{{ Str::limit($curso->descripcion, 100) }}</p>
-                        <p class="card-text"><strong>Precio:</strong> ${{ $curso->precio }}</p>
-                        <button class="btn btn-comprar w-100 py-3 mt-3" data-bs-toggle="modal" data-bs-target="#modalComprar-{{ $curso->id }}">
-                            <i class="fas fa-cart-plus"></i> Comprar Curso
-                        </button>
+    <div class="cursos-container">
+        <div class="row g-4">
+            @foreach ($cursos as $curso)
+                <div class="col-lg-4 col-md-6">
+                    <div class="card">
+                        <img src="{{ asset('storage/' . $curso->imagen) }}" class="card-img-top" alt="{{ $curso->nombre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $curso->nombre }}</h5>
+                            <p class="card-text">{{ Str::limit($curso->descripcion, 100) }}</p>
+                            <p class="card-text"><strong>Precio:</strong> ${{ $curso->precio }}</p>
+                            <button class="btn btn-comprar w-100 py-3 mt-3" data-bs-toggle="modal" data-bs-target="#modalComprar-{{ $curso->id }}">
+                                <i class="fas fa-cart-plus"></i> Comprar Curso
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Modal para la compra -->
-            <div class="modal fade" id="modalComprar-{{ $curso->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $curso->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form id="checkout-form-{{ $curso->id }}">
-                            @csrf
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalLabel-{{ $curso->id }}">Comprar Curso: {{ $curso->nombre }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" id="product_id" value="{{ $curso->id }}">
-                                <input type="hidden" id="product_price" value="{{ $curso->precio }}">
-                                <p><strong>Precio del Curso:</strong> ${{ $curso->precio }}</p>
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Teléfono</label>
-                                    <input type="text" id="phone" class="form-control" required>
+                <!-- Modal para la compra -->
+                <div class="modal fade" id="modalComprar-{{ $curso->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $curso->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="checkout-form-{{ $curso->id }}">
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalLabel-{{ $curso->id }}">Comprar Curso: {{ $curso->nombre }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Correo Electrónico/Email</label>
-                                    <input type="email" id="email" class="form-control" required>
+                                <div class="modal-body">
+                                    <input type="hidden" id="product_id" value="{{ $curso->id }}">
+                                    <input type="hidden" id="product_price" value="{{ $curso->precio }}">
+                                    <p><strong>Precio del Curso:</strong> ${{ $curso->precio }}</p>
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label">Teléfono</label>
+                                        <input type="text" id="phone" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Correo Electrónico/Email</label>
+                                        <input type="email" id="email" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Nombre</label>
+                                        <input type="text" id="name" class="form-control" required>
+                                    </div>
+                                    <div id="wallet_container"></div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Nombre</label>
-                                    <input type="text" id="name" class="form-control" required>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" id="checkout-btn" class="btn btn-primary">Pagar</button>
                                 </div>
-                                <!-- Contenedor para el wallet de Mercado Pago -->
-                                <div id="wallet_container"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" id="checkout-btn" class="btn btn-primary">Pagar</button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 @endsection
 
@@ -137,7 +140,6 @@
     <script>
         const mp = new MercadoPago("{{ env('MERCADO_PAGO_PUBLIC_KEY') }}");
 
-        // Inicializar el wallet de Mercado Pago cuando se abra el modal
         document.querySelectorAll('#checkout-btn').forEach(button => {
             button.addEventListener('click', function () {
                 const form = this.closest('form');
@@ -146,7 +148,6 @@
                 const nombre = form.querySelector('#name').value;
                 const email = form.querySelector('#email').value;
 
-                // Validación de los campos
                 if (!telefono || !email || !nombre) {
                     Swal.fire({
                         title: 'Error!',
@@ -175,7 +176,6 @@
                     nombre_comprador: nombre
                 };
                 
-                // Enviar los datos al backend para crear la preferencia
                 fetch('/create-preference', {
                     method: 'POST',
                     headers: {
@@ -194,8 +194,6 @@
                     if (preference.error) {
                         throw new Error(preference.error);
                     }
-
-                    // Redirige al usuario a la URL generada por Mercado Pago
                     window.location.href = preference.init_point;
                 })
                 .catch(error => console.error('Error al crear la preferencia:', error));

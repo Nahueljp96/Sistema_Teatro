@@ -10,8 +10,10 @@
 ## About Laravel
 
 
-#### NAHUEL::
+NAHUEL::
+RECORDAR: SETIE LA BASE DE DATOS PARA QUE ALMACENE ENTRADAS POR DEFAULT 1 PARA TEST, LUEGO HAY QUE MODIFICAR PARA QUE PUEDAN COMPRAR MAS DE UNA ENTRADA.
 
+<<<<<<< HEAD
 RECORDAR: SETIE LA BASE DE DATOS PARA QUE ALMACENE ENTRADAS POR DEFAULT 1 PARA TEST, LUEGO HAY QUE MODIFICAR PARA QUE PUEDAN COMPRAR MAS DE UNA ENTRADA.
 
 DEBUGGEAR QUE NO SE VEAN LAS IMAGENES EN PRODUCCIÓN: 
@@ -36,3 +38,13 @@ Copy code
     'visibility' => 'public',
 ],
 tambien hice eso, POR LAS DUDAS!!!
+=======
+DEBUGGEAR QUE NO SE VEAN LAS IMAGENES EN PRODUCCIÓN:
+
+Si el directorio storage no existe, créalo manualmente para asegurarte de que Laravel pueda escribir en él: mkdir -p /home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage (OBVIO USANDO EL SSH) Comando para crear enlace simbolico (ya que artisan no deja si es webcompartido) : ln -s /home/u594708880/domains/bisque-ram-716931.hostingersite.com/storage/app/public /home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage
+
+(recordar que para que la web pueda ver las imagenes, se deben almacenar en "public_html/public/"crear carpeta "storage" )
+
+Verifica la configuración del almacenamiento Revisa también la configuración del disco en config/filesystems.php para asegurarte de que el disco public esté correctamente configurado, como mencionamos anteriormente:
+php Copy code 'public' => [ 'driver' => 'local', 'root' => '/home/u594708880/domains/bisque-ram-716931.hostingersite.com/public_html/public/storage', 'url' => env('APP_URL') . '/storage', 'visibility' => 'public', ], tambien hice eso, POR LAS DUDAS!!!
+>>>>>>> 593e718e (modifique levemente el readme tambien)

@@ -15,4 +15,14 @@ class Curso extends Model
     {
         return $this->hasMany(Alta::class);
     }
+
+    /**
+ * Relación con el modelo CursoVenta.
+ * Un curso puede tener muchas ventas.
+ */
+    public function ventas()
+    {
+        return $this->hasMany(CursoVenta::class, 'curso_id', 'id');
+    }
+
 }

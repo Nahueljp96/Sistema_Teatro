@@ -109,9 +109,9 @@
 
                 <!-- Modal para la compra -->
                 <div class="modal fade" id="modalComprar-{{ $obra->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $obra->id }}" aria-hidden="true">
+                    ```php
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            ```php
                             <form id="checkout-form-{{ $obra->id }}">
                                 @csrf
                                 <div class="modal-header">

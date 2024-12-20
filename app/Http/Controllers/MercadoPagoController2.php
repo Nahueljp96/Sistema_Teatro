@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\Input;
 //este es para procesar los pagos de los cursos!!
 class MercadoPagoController extends Controller
 {
-    public function createPaymentPreference(Request $request)
+    public function createPaymentPreference2(Request $request)
 
     {   
         

@@ -38,9 +38,9 @@ Route::view('/cursos', 'cursos')->name('cursos');
 Route::get('/', [WebController::class, 'inicio']);
 Route::get('/cursos', [WebControllerCursos::class, 'cursos']);
 Route::get('/obras', [WebController::class, 'obras']);
-Route::post('/comprar-entrada', [WebController::class, 'comprarEntrada']);
-Route::post('/procesar-compra', [CompraController::class, 'procesarCompra'])->name('procesar-compra');
-Route::get('/comprar-entradas/{obra_id}', [CompraController::class, 'show'])->name('comprar-entradas');
+// Route::post('/comprar-entrada', [WebController::class, 'comprarEntrada']);
+// Route::post('/procesar-compra', [CompraController::class, 'procesarCompra'])->name('procesar-compra');
+// Route::get('/comprar-entradas/{obra_id}', [CompraController::class, 'show'])->name('comprar-entradas');
 Route::get('/obras', function () {
     $obras = Obra::all(); // Obtiene todas las obras desde la base de datos
     return view('obras', compact('obras'));
@@ -48,14 +48,16 @@ Route::get('/obras', function () {
 
 
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
-Route::post('/guardar-entrada', [MercadoPagoController::class, 'guardarEntrada']);
+Route::post('/create-preference2', [MercadoPagoController::class, 'createPaymentPreference2']);
+// Route::post('/guardar-entrada', [MercadoPagoController::class, 'guardarEntrada']);
+// Route::post('/guardar-entrada', [MercadoPagoController::class, 'guardarEntrada']);
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'handlePaymentSuccess'])->name('mercadopago.success');
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'handlePaymentFailed'])->name('mercadopago.failed');
 Route::get('/prueba', function(){ $backUrls = [
     'success' => route('mercadopago.success'),
     'failure' => route('mercadopago.failed')
     
-];dd($backUrls);});
+];});
 #test
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'handlePaymentSuccess'])->name('mercadopago.success');
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'handlePaymentFailure'])->name('mercadopago.failed');

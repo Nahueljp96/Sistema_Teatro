@@ -176,7 +176,7 @@
                     nombre_comprador: nombre
                 };
                 
-                fetch('/create-preference', {
+                fetch('/create-preference2', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

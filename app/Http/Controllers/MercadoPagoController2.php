@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\CursoVentaMail; // Asegúrate de crear esta clase de correo
 use App\Models\CursoVenta; // Modelo para guardar información del ticket (si es necesario)
 use Exception;
+
 use Symfony\Component\Console\Input\Input;
 //este es para procesar los pagos de los cursos!!
-class MercadoPagoController extends Controller
+class MercadoPagoController2 extends Controller
 {
+    
     public function createPaymentPreference2(Request $request)
 
     {   
@@ -172,7 +174,7 @@ class MercadoPagoController extends Controller
     //         return view('pagos.success', ['paymentId' => $paymentId]);
     // }
    // este deberia funcionar jaja
-    public function handlePaymentSuccess(Request $request)
+    public function handlePaymentSuccess2(Request $request)
 {   
     
     // Verificar datos recibidos desde Mercado Pago
@@ -215,11 +217,8 @@ class MercadoPagoController extends Controller
             Log::error('Error enviando email:', ['error' => $e->getMessage()]);
         }
 
-        // Devolver vista de éxito
-        return view('pagos.success', [
-            'paymentId' => $paymentId,
-            'status' => $status,
-        ]);
+        // Redirigir a la página de inicio
+        return redirect('/');
 
     } catch (Exception $e) {
         Log::error('Error procesando el pago:', ['error' => $e->getMessage()]);

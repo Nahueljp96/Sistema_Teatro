@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 use App\Http\Controllers\PagoController;
@@ -23,6 +21,7 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\WebControllerCursos;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\MercadoPagoController2;
 use App\Models\Obra;
 
 
@@ -38,26 +37,23 @@ Route::view('/cursos', 'cursos')->name('cursos');
 Route::get('/', [WebController::class, 'inicio']);
 Route::get('/cursos', [WebControllerCursos::class, 'cursos']);
 Route::get('/obras', [WebController::class, 'obras']);
-// Route::post('/comprar-entrada', [WebController::class, 'comprarEntrada']);
-// Route::post('/procesar-compra', [CompraController::class, 'procesarCompra'])->name('procesar-compra');
-// Route::get('/comprar-entradas/{obra_id}', [CompraController::class, 'show'])->name('comprar-entradas');
+
 Route::get('/obras', function () {
     $obras = Obra::all(); // Obtiene todas las obras desde la base de datos
     return view('obras', compact('obras'));
 })->name('obras');
 
 
+// Rutas para MercadoPagoController
 Route::post('/create-preference', [MercadoPagoController::class, 'createPaymentPreference']);
-Route::post('/create-preference2', [MercadoPagoController::class, 'createPaymentPreference2']);
-// Route::post('/guardar-entrada', [MercadoPagoController::class, 'guardarEntrada']);
-// Route::post('/guardar-entrada', [MercadoPagoController::class, 'guardarEntrada']);
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'handlePaymentSuccess'])->name('mercadopago.success');
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'handlePaymentFailed'])->name('mercadopago.failed');
-Route::get('/prueba', function(){ $backUrls = [
-    'success' => route('mercadopago.success'),
-    'failure' => route('mercadopago.failed')
-    
-];});
+
+// Rutas para MercadoPagoController2
+Route::post('/create-preference2', [MercadoPagoController2::class, 'createPaymentPreference2']);
+Route::get('/mercadopago/success2', [MercadoPagoController2::class, 'handlePaymentSuccess2'])->name('mercadopago.success2');
+Route::get('/mercadopago/failed2', [MercadoPagoController2::class, 'handlePaymentFailed2'])->name('mercadopago.failed2');
+
 #test
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'handlePaymentSuccess'])->name('mercadopago.success');
 Route::get('/mercadopago/failed', [MercadoPagoController::class, 'handlePaymentFailure'])->name('mercadopago.failed');

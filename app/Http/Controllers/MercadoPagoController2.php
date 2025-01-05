@@ -11,6 +11,9 @@ use App\Models\CursoVenta; // Modelo para guardar información del ticket (si es
 use Exception;
 
 use Symfony\Component\Console\Input\Input;
+
+use function Laravel\Prompts\error;
+
 //este es para procesar los pagos de los cursos!!
 class MercadoPagoController2 extends Controller
 {
@@ -80,17 +83,7 @@ class MercadoPagoController2 extends Controller
         }
         
       
-        // Log::info("Intentamos guardar:", $request->all()); // Verifica los datos enviados en la solicitud
-        // // Guardar la entrada
-        // $entrada = new Entrada();
-        // $entrada->obra_id = $request->input('product.0.id'); // Usar el ID de la obra desde los datos del producto
-        // $entrada->telefono = $request->input('payer.phone'); // Asegúrate de que estos datos lleguen en la solicitud
-        // $entrada->comprador_email = $request->input('payer.email'); // Obtener el email del comprador
-        // $entrada->nombre_comprador = $request->input('payer.name'); // Obtener el nombre del comprador
-        // $entrada->preference_id = $preference->id; // Asociar el preference_id generado por Mercado Pago
-        // $entrada->save();
-
-
+        
     }
     
     
@@ -125,106 +118,58 @@ class MercadoPagoController2 extends Controller
             "auto_return" => 'approved',
         ];
     }
-  /* public function handlePaymentSuccess(Request $request)
-    {
-        $paymentId = $request->query('payment_id');
-        $payerEmail = $request->query('payer_email'); // Se obtiene del request
-        $cantidad = $request->query('cantidad');
-        // Guardar información del ticket
-        $entrada = new Entrada();
-        $entrada->obra_id = $paymentId;
-        $entrada->comprador_email = $payerEmail;
-        $entrada->cantidad = $cantidad;
-        $entrada->save();
-        // Enviar correo al usuario con el ticket
-        Mail::to($payerEmail)->send(new EntradaMail($entrada));
-        return view('pagos.success', ['paymentId' => $paymentId]);
-    } */
 
-    // public function handlePaymentSuccess(Request $request)
-    //     {   
-    //         dd($request->all());
-    //         // $paymentId = $request->query('payment_id');
-    //         // $payerEmail = $request->query('payer_email'); 
-    //         // $obraId = $request->query('obra_id'); 
-            
-
-
-    //         Log::info('Guardando entrada:', [
-    //             'obra_id' => $obraId,
-    //             'comprador_email' => $payerEmail,
-                
-    //         ]);
-            
-    //         // Guardar la entrada
-    //         $entrada = new Entrada();
-    //         $entrada->obra_id = $request->input('obra_id');
-    //         $entrada->telefono = $request->input('telefono');
-    //         $entrada->comprador_email = $request->input('comprador_email');
-    //         $entrada->nombre_comprador = $request->input('nombre_comprador');
-    //         $entrada->save();
-
-    //         // Enviar el correo
-    //         try {
-    //             Mail::to($payerEmail)->send(new EntradaMail($entrada));
-    //         } catch (Exception $e) {
-    //             Log::error('Error enviando email:', ['error' => $e->getMessage()]);
-    //         }
-
-    //         return view('pagos.success', ['paymentId' => $paymentId]);
-    // }
-   // este deberia funcionar jaja
     public function handlePaymentSuccess2(Request $request)
-{   
+    {   
     
-    // Verificar datos recibidos desde Mercado Pago
-    $paymentId = $request->query('payment_id');
-    $status = $request->query('status');
-    $preferenceId = $request->query('preference_id');
+        // Verificar datos recibidos desde Mercado Pago
+        $paymentId = $request->query('payment_id');
+        $status = $request->query('status');
+        $preferenceId = $request->query('preference_id');
 
-    // Log de los datos recibidos
-    Log::info('Datos recibidos de Mercado Pago:', [
-        'payment_id' => $paymentId,
-        'status' => $status,
-        'preference_id' => $preferenceId,
-    ]);
+        // Log de los datos recibidos
+        Log::info('Datos recibidos de Mercado Pago:', [
+            'payment_id' => $paymentId,
+            'status' => $status,
+            'preference_id' => $preferenceId,
+        ]);
 
-    try {
-        // Buscar la entrada asociada por el preference_id
-        $cursoVenta = CursoVenta::where('preference_id', $preferenceId)->first();
-
-        if (!$cursoVenta) {
-            Log::error('No se encontró la entrada asociada al preference_id:', ['preference_id' => $preferenceId]);
-            return response()->json(['error' => 'Entrada no encontrada.'], 404);
-        }
-
-        // Actualizar el estado de la entrada
-        if ($status === 'approved') {
-            $cursoVenta->estado_pago = 'pagado';
-            $cursoVenta->preference_id = $paymentId; // Asociar el payment_id al registro de entrada
-            $cursoVenta->save();
-
-            Log::info('Curso actualizado exitosamente:', ['cursoVenta' => $cursoVenta]);
-        } else {
-            Log::warning('El pago no fue aprobado:', ['status' => $status]);
-        }
-
-        // Enviar correo al comprador
         try {
-            Mail::to($cursoVenta->comprador_email)->send(new CursoVentaMail($cursoVenta));
-            Log::info('Correo enviado exitosamente a:', ['email' => $cursoVenta->comprador_email]);
+            // Buscar la venta asociada por el preference_id
+            $cursoVenta = CursoVenta::where('preference_id', $preferenceId)->first();
+             
+            if (!$cursoVenta) {
+                Log::error('No se encontró la venta asociada al preference_id:', ['preference_id' => $preferenceId]);
+                return response()->json(['error' => 'Cursoventa no encontrado.'], 404);
+            }
+
+            // Actualizar el estado de la entrada
+            if ($status === 'approved') {
+                $cursoVenta->estado_pago = 'pagado';
+                $cursoVenta->preference_id = $paymentId; // Asociar el payment_id al registro de entrada
+                $cursoVenta->save();
+
+                Log::info('Curso actualizado exitosamente:', ['cursoVenta' => $cursoVenta]);
+            } else {
+                Log::warning('El pago no fue aprobado:', ['status' => $status]);
+            }
+
+            // Enviar correo al comprador
+            try {
+                Mail::to($cursoVenta->comprador_email)->send(new CursoVentaMail($cursoVenta));
+                Log::info('Correo enviado exitosamente a:', ['email' => $cursoVenta->comprador_email]);
+            } catch (Exception $e) {
+                Log::error('Error enviando email:', ['error' => $e->getMessage()]);
+            }
+
+            // Redirigir a la página de inicio
+            return redirect('/');
+
         } catch (Exception $e) {
-            Log::error('Error enviando email:', ['error' => $e->getMessage()]);
+            Log::error('Error procesando el pago:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Ocurrió un error al procesar el pago.'], 500);
         }
-
-        // Redirigir a la página de inicio
-        return redirect('/');
-
-    } catch (Exception $e) {
-        Log::error('Error procesando el pago:', ['error' => $e->getMessage()]);
-        return response()->json(['error' => 'Ocurrió un error al procesar el pago.'], 500);
     }
-}
 
 
 }

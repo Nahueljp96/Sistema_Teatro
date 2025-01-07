@@ -7,6 +7,7 @@
     <h1>¡Gracias por tu compra, {{ $cursoVenta->nombre_comprador }}!</h1>
     <p>Tu inscripción al curso <strong>{{ $cursoVenta->curso->nombre }}</strong> ha sido confirmada.</p>
     <p>Estado del pago: <strong>{{ $cursoVenta->estado_pago }}</strong></p>
+    <p>CÓDIGO UNICO DE PAGO: <strong>{{ $cursoVenta->preference_id }}</strong></p>
     <p>Cantidad de inscripciones: {{ $cursoVenta->cantidad }}</p>
     <p>Adjuntamos un comprobante en formato PDF con los detalles de tu compra.</p>
     <p>Si tienes alguna consulta, no dudes en contactarnos.</p>

@@ -23,6 +23,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\MercadoPagoController2;
 use App\Models\Obra;
+use App\Models\CursoVenta;
 
 
 #web:

@@ -12,14 +12,38 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
 
 class CursoVentaResource extends Resource
 {
+    
+
     protected static ?string $model = CursoVenta::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public function tuHermana (){
+        $preference_id = '17201799-4b619b2b-c796-4565-9ac6-cab7d4d30d59';
+
+            // Realiza la consulta con el where
+            $esto = CursoVenta::where('preference_id', $preference_id);
+
+            // Registra la consulta SQL generada en los logs para depuración
+            Log::debug($esto->toSql());
+            Log::debug($esto->getBindings());
+
+            // Obtén el primer resultado de la consulta
+            $registro = $esto->first();
+
+            if ($registro) {
+                Log::info('Registro encontrado:', $registro->toArray());
+            } else {
+                Log::warning('No se encontró ningún registro con ese preferenceID.');
+            }
+    }
 
     public static function form(Form $form): Form
+
+                
     {
         return $form
             ->schema([

@@ -100,8 +100,8 @@ class MercadoPagoController2 extends Controller
     protected function createPreferenceRequest($items, $payer): array
     {
         $backUrls = [
-            'success' => route('mercadopago.success'),
-            'failure' => route('mercadopago.failed')
+            'success' => route('mercadopago.success2'),
+            'failure' => route('mercadopago.failed2')
         ];
         return [
             "items" => $items,
@@ -125,7 +125,8 @@ class MercadoPagoController2 extends Controller
         // Verificar datos recibidos desde Mercado Pago
         $paymentId = $request->query('payment_id');
         $status = $request->query('status');
-        $preferenceId = $request->query('preference_id');
+        $preferenceId = trim($request->input('preference_id'));
+
 
         // Log de los datos recibidos
         Log::info('Datos recibidos de Mercado Pago:', [

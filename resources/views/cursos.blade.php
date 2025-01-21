@@ -93,15 +93,7 @@
                         </div>
                     </div>
                 </div>
-                @php    
-                        $esto= new CursoVenta();
-                        $esto=CursoVenta::where('17201799-4b619b2b-c796-4565-9ac6-cab7d4d30d59');
-
-                            log::debug($esto->toSql());
-                            log::debug($esto->getBindings());
-
-                            $esto->first();   
-                @endphp
+                
 
                 <!-- Modal para la compra -->
                 <div class="modal fade" id="modalComprar-{{ $curso->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $curso->id }}" aria-hidden="true">

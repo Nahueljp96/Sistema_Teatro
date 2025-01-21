@@ -52,7 +52,38 @@
             background-color: #343a40;
             color: white;
         }
-    </style>
+    /* WSP BOTON */    
+    </style> 
+        <a href="https://wa.me/1234567890" class="btn-wsp" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        
+        <style>
+            .btn-wsp {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: #25d366;
+                color: white;
+                font-size: 2rem;
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                transition: transform 0.3s, box-shadow 0.3s;
+                text-decoration: none;
+            }
+        
+            .btn-wsp:hover {
+                transform: scale(1.1);
+                box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+    
     @stack('styles')
 </head>
 <body>

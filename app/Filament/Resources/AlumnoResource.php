@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,6 +73,12 @@ class AlumnoResource extends Resource
             ])
             ->filters([
                 //
+                SelectFilter::make('dni' , 'nombre', 'apellido')
+                ->options([
+                    'draft' => 'Draft',
+                    'reviewing' => 'Reviewing',
+                    'published' => 'Published',
+                ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

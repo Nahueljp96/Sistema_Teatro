@@ -28,6 +28,8 @@ class PagoResource extends Resource
         return $form->schema([
             Select::make('alumno_id')
                 ->relationship('alumno', 'nombre')
+                ##Esta linea es para que en el desplegable figure con apellido!!
+                ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->nombre} {$record->apellido}")
                 ->required(),
             TextInput::make('monto')
                 ->numeric()

@@ -61,13 +61,15 @@ class PagoController extends Controller
         $ultimoPago = Pago::where('alumno_id', $alumnoId)->latest()->first();
 
         if (!$ultimoPago) {
-            return 0; // Si no hay pagos, no hay días restantes
+            return "No tiene días restantes/Vencido"; // Si no hay pagos registrados
         }
 
         // Calcular la fecha de vencimiento
         $vencimiento = Carbon::parse($ultimoPago->fecha_pago)->addDays(30);
 
-        // Calcular los días restantes (si son negativos, devolver 0)
-        return max(Carbon::now()->diffInDays($vencimiento, false), 0);
+        // Calcular los días restantes
+        $diasRestantes = Carbon::now()->diffInDays($vencimiento, false);
+
+        return $diasRestantes > 0 ? $diasRestantes : "No tiene días restantes/Vencido";
     }
 }

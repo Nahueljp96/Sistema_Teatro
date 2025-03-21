@@ -15,6 +15,7 @@ use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
 
 class AltaResource extends Resource
 {
@@ -67,6 +68,12 @@ class AltaResource extends Resource
             ])
             ->filters([
                 //
+                SelectFilter::make('dni' , 'nombre', 'apellido')
+                ->options([
+                    'draft' => 'Draft',
+                    'reviewing' => 'Reviewing',
+                    'published' => 'Published',
+                ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

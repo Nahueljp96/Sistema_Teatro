@@ -29,6 +29,7 @@ class AltaResource extends Resource
                 ->schema([
                     Forms\Components\Select::make('alumno_id')->label('Alumno')
                     ->relationship('alumno', 'nombre')
+                    ##Esta linea es para que en el desplegable figure con apellido!!
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->nombre} {$record->apellido}")
                     ->required(),  
                     Forms\Components\Select::make('curso_id')->label('Curso')

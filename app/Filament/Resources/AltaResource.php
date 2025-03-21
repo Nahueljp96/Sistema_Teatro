@@ -28,8 +28,9 @@ class AltaResource extends Resource
             return $form
                 ->schema([
                     Forms\Components\Select::make('alumno_id')->label('Alumno')
-                        ->relationship('alumno', 'nombre')
-                        ->required(),  
+                    ->relationship('alumno', 'nombre')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->nombre} {$record->apellido}")
+                    ->required(),  
                     Forms\Components\Select::make('curso_id')->label('Curso')
                         ->relationship('curso', 'nombre')
                         ->required(),

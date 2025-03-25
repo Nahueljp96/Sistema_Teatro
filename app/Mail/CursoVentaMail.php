@@ -10,19 +10,19 @@ class CursoVentaMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $entrada;
+    public $cursoVenta;
 
-    public function __construct($entrada)
+    public function __construct($cursoVenta)
     {
-        $this->entrada = $entrada;
+        $this->cursoVenta = $cursoVenta;
     }
 
     public function build()
     {
         return $this->view('emails.cursoventa')
-                    ->subject('Tu entrada para la obra de teatro')
+                    ->subject('Tu comprobante de pago al curso!')
                     ->with([
-                        'entrada' => $this->entrada,
+                        'cursoVenta' => $this->cursoVenta,
                     ]);
     }
 }
